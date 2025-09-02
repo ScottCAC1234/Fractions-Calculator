@@ -1,0 +1,24 @@
+function gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a||1; }
+function simplify([n,d]){ if(d===0) return [0,1]; if(d<0){ n=-n; d=-d; } const g=gcd(n,d); return [n/g,d/g]; }
+function add([a,b],[c,d]){ return simplify([a*d + c*b, b*d]); }
+function sub([a,b],[c,d]){ return simplify([a*d - c*b, b*d]); }
+function mul([a,b],[c,d]){ return simplify([a*c, b*d]); }
+function div([a,b],[c,d]){ if(c===0) throw new Error("Divide by 0"); return simplify([a*d, b*c]); }
+function toMixed([n,d]){ if(d===0) return "NaN"; const sign=n<0?-1:1,A=Math.abs(n); const w=Math.trunc(A/d), r=A%d; if(r===0) return String(sign*w); if(w===0) return `${sign<0?'-':''}${r}/${d}`; return `${sign<0?'-':''}${w} ${r}/${d}`; }
+let whole="", num="", den=""; let tokens=[];
+function currentFrac(){ if(whole===""&&num===""&&den==="") return null; if(num===""&&den===""){ const w=parseInt(whole||"0",10); return [w,1]; } if(num!==""&&den==="") return null; if(den==="0") return null; const w=parseInt(whole||"0",10); const n=parseInt(num||"0",10); const d=parseInt(den||"1",10); return simplify([w*d+n,d]); }
+function currentFracText(){ if(whole===""&&num===""&&den==="") return "0"; if(num===""&&den==="") return whole||"0"; if(whole===""||whole==="0") return `${num||"0"}/${den||"?"}`; return `${whole} ${num||"0"}/${den||"?"}`; }
+function tokensText(){ let out=[]; for(let i=0;i<tokens.length;i++){ const t=tokens[i]; out.push(typeof t==="string"?t:toMixed(t)); } const cur=currentFrac(); if(cur) out.push(toMixed(cur)); return out.join(" "); }
+function updateDisplayOnly(){ document.getElementById("display-input").innerText = tokensText() || currentFracText(); }
+function updateAllResults(frac){ if(!frac){ document.getElementById("result-fraction").innerText="-"; document.getElementById("result-mixed").innerText="-"; document.getElementById("result-decimal").innerText="-"; return; } const [n,d]=frac; document.getElementById("result-fraction").innerText=`${n}/${d}`; document.getElementById("result-mixed").innerText=toMixed(frac); document.getElementById("result-decimal").innerText=(n/d).toFixed(6); }
+function clearPad(target){ if(target==="whole") whole=""; if(target==="num") num=""; if(target==="den") den=""; updateDisplayOnly(); }
+function clearAll(){ whole=num=den=""; tokens=[]; document.getElementById("history").innerHTML=""; document.getElementById("display-input").innerText="0"; updateAllResults(null); }
+document.getElementById("clear-all").addEventListener("click", clearAll);
+function appendDigit(target,d){ if(target==="whole") whole+=d; if(target==="num") num+=d; if(target==="den") den+=d; updateDisplayOnly(); }
+function commitCurrent(){ const f=currentFrac(); if(!f){ alert("Please complete a valid fraction. (Denominator required and not 0)"); return false; } tokens.push(f); whole=num=den=""; updateDisplayOnly(); return true; }
+function pressOp(op){ if(tokens.length>0 && typeof tokens[tokens.length-1]==="string"){ tokens[tokens.length-1]=op; updateDisplayOnly(); return; } if(!commitCurrent()) return; tokens.push(op); updateDisplayOnly(); }
+function evaluateTokens(list){ if(list.length===0) return [0,1]; if(typeof list[list.length-1]==="string") list=list.slice(0,-1); if(list.length===0) return [0,1]; let acc=list[0]; for(let i=1;i<list.length;i+=2){ const op=list[i], rhs=list[i+1]; if(!rhs) break; if(op==="+") acc=add(acc,rhs); else if(op==="−"||op==="–"||op==="—"||op==="-") acc=sub(acc,rhs); else if(op==="*") acc=mul(acc,rhs); else if(op==="/") acc=div(acc,rhs); } return simplify(acc); }
+function pressEquals(){ if(!(tokens.length>0 && typeof tokens[tokens.length-1]==="string")){ const cur=currentFrac(); if(cur){ tokens.push(cur); whole=num=den=""; } } else { if(typeof tokens[tokens.length-1]==="string") tokens.pop(); } if(tokens.length===0){ updateAllResults(null); return; } const exprText=tokens.map(t=>typeof t==="string"?t:toMixed(t)).join(" "); let result; try{ result=evaluateTokens(tokens.slice()); }catch(e){ alert(e.message||"Error"); return; } updateAllResults(result); const [n,d]=result; const entry=document.createElement("div"); entry.className="history-entry"; entry.innerHTML=`<strong>${exprText}</strong><br>Fraction: ${n}/${d}<br>Mixed: ${toMixed(result)}<br>Decimal: ${(n/d).toFixed(6)}`; document.getElementById("history").prepend(entry); tokens=[result]; updateDisplayOnly(); }
+document.addEventListener("click",(e)=>{ const btn=e.target.closest("button"); if(!btn) return; if(btn.dataset.digit){ const pad=btn.closest(".pad"); const target=pad?.dataset.target; if(target) appendDigit(target, btn.dataset.digit); return; } if(btn.dataset.action==="clear-pad"){ clearPad(btn.dataset.target); return; } if(btn.classList.contains("op") && btn.id!=="equals"){ pressOp(btn.dataset.op); return; } if(btn.id==="equals"){ pressEquals(); return; } });
+updateDisplayOnly(); updateAllResults(null);
+if("serviceWorker" in navigator){ navigator.serviceWorker.register("service-worker.js"); }
