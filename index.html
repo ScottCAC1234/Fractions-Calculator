@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>CAC Fractions Calculator</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#004aad" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+<body>
+  <header>
+    <h1>Fractions Calculator</h1>
+  </header>
+
+  <main class="layout">
+    <section class="expression">
+      <h2>Expression</h2>
+      <p id="expression-preview" class="preview">Expression: </p>
+
+      <div class="inputs">
+        <div class="row">
+          <input type="text" class="fraction-input" placeholder="e.g. 1 1/16" />
+          <select class="operator">
+            <option value="+">+</option>
+            <option value="-">−</option>
+            <option value="*">×</option>
+            <option value="/">÷</option>
+          </select>
+        </div>
+        <div class="row">
+          <input type="text" class="fraction-input" placeholder="e.g. 1/8" />
+          <select class="operator">
+            <option value="+">+</option>
+            <option value="-">−</option>
+            <option value="*">×</option>
+            <option value="/">÷</option>
+          </select>
+        </div>
+        <div class="row">
+          <input type="text" class="fraction-input" placeholder="e.g. 2 1/4" />
+          <select class="operator">
+            <option value="+">+</option>
+            <option value="-">−</option>
+            <option value="*">×</option>
+            <option value="/">÷</option>
+          </select>
+        </div>
+        <div class="row">
+          <input type="text" class="fraction-input" placeholder="e.g. 1/64" />
+          <select class="operator">
+            <option value="+">+</option>
+            <option value="-">−</option>
+            <option value="*">×</option>
+            <option value="/">÷</option>
+          </select>
+        </div>
+        <div class="row">
+          <input type="text" class="fraction-input" placeholder="e.g. 2" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button onclick="calculate()">Calculate</button>
+        <button onclick="clearAll()" class="clear-btn">Clear All</button>
+      </div>
+    </section>
+
+    <section class="result">
+      <h2>Result</h2>
+      <p id="fraction-result">Fraction: </p>
+      <p id="mixed-result">Mixed: </p>
+      <p id="decimal-result">Decimal: </p>
+
+      <h3>History</h3>
+      <div id="history" class="history"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <small>Contractors Alliance Canada • Works offline • Installable</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
