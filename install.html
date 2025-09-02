@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Install the Fraction Calculator App</title>
+  <style>
+    :root{
+      --brand:#2c6bff; --accent:#ff7a2f; --accent-d:#e3661d;
+      --text:#0f172a; --muted:#6b7280; --bg:#f7f9fc; --card:#fff; --border:#e5e7eb;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    .wrap{max-width:960px;margin:0 auto;padding:24px 16px}
+    .card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 28px rgba(0,0,0,.06);padding:22px}
+    h1{font-size:44px;line-height:1.08;margin:0 0 12px;color:var(--brand)}
+    h2{font-size:24px;margin:18px 0 10px}
+    p{margin:10px 0}
+    ul{margin:8px 0 0 22px}
+    li{margin:6px 0}
+    .hr{height:1px;background:var(--border);margin:18px 0}
+    .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:22px;align-items:start}
+    @media (max-width:900px){ .grid{grid-template-columns:1fr} }
+    .btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;
+         padding:16px 26px;border-radius:999px;font-weight:800;font-size:20px;
+         box-shadow:0 10px 24px rgba(255,122,47,.25)}
+    .btn:hover{background:var(--accent-d)}
+    .subtle{color:var(--muted);font-size:14px}
+    .callout{background:#f3f4f6;border:1px solid var(--border);border-radius:12px;padding:12px 14px;color:#111827}
+    .steps{counter-reset:step}
+    .steps p{margin:10px 0}
+    .steps p:before{counter-increment:step;content:counter(step) ". ";font-weight:800;margin-right:6px;color:#334155}
+    .kbd{display:inline-block;border:1px solid var(--border);border-bottom-width:2px;border-radius:8px;padding:4px 8px;background:#fff}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="grid">
+      <div class="card">
+        <h1>Fraction Calculator Mobile App</h1>
+        <p>Get instant access to our professional fraction calculator designed for contractors.
+           Works offline once installed.</p>
+        <ul>
+          <li>Mixed number calculations (e.g., <strong>1&nbsp;1/4&nbsp;+&nbsp;2&nbsp;3/8</strong>)</li>
+          <li>Precise decimal results</li>
+          <li>Fast, mobile-optimized interface</li>
+        </ul>
+
+        <div class="hr"></div>
+
+        <!-- BIG ORANGE BUTTON – goes to your PWA on GitHub Pages -->
+        <p style="text-align:center;margin:14px 0 8px;">
+          <a class="btn" href="https://scottcac1234.github.io/Fractions-Calculator/" target="_blank" rel="noopener">
+            Open Calculator / Install
+          </a>
+        </p>
+        <p class="subtle" style="text-align:center;">
+          On Android/Desktop you’ll see an install prompt. On iPhone/iPad, follow the steps below.
+        </p>
+
+        <div class="hr"></div>
+
+        <div class="callout">
+          <strong>Tip:</strong> If this opens inside another app (Facebook/Instagram), tap the •••/Share menu and choose
+          <em>Open in Safari/Chrome</em> first—then follow the steps below.
+        </div>
+
+        <h2>How to install on iPhone / iPad</h2>
+        <div class="steps">
+          <p>Open the calculator link above in <strong>Safari</strong>.</p>
+          <p>Tap the <span class="kbd">Share</span> icon at the bottom of Safari.</p>
+          <p>Scroll and tap <span class="kbd">Add to Home Screen</span>.</p>
+          <p>Tap <span class="kbd">Add</span>. The app will appear on your Home Screen and work offline.</p>
+        </div>
+
+        <h2 style="margin-top:20px;">How to install on Android / Desktop</h2>
+        <div class="steps">
+          <p>Open the calculator link above.</p>
+          <p>In Chrome/Edge, tap the menu <span class="kbd">⋮</span> (or address-bar icon) and choose
+             <span class="kbd">Install app</span> or <span class="kbd">Add to Home screen</span>.</p>
+          <p>Confirm <span class="kbd">Install</span>. The app icon will appear with your other apps and work offline.</p>
+        </div>
+
+        <p class="subtle" style="margin-top:12px;">Having trouble? Make sure you’re on an <strong>https://</strong> page and not inside an in-app browser.</p>
+      </div>
+
+      <div class="card">
+        <h2>What you’ll get</h2>
+        <ul>
+          <li>Two-column display: full equation on the left, results on the right</li>
+          <li>Mixed result and decimal (no improper fraction)</li>
+          <li>History with running totals</li>
+          <li>Works offline once installed</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
