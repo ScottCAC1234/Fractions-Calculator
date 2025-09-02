@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Install the Fraction Calculator App</title>
+
+  <!-- PWA hooks (uses your existing files at repo root) -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#004aad" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="FractionsCalc" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+
+  <style>
+    :root{
+      --brand:#4e89ff; --accent:#ff7a2f; --accent-d:#e3661d;
+      --text:#1a1f36; --muted:#6b7280; --bg:#f7f9fc; --card:#fff; --border:#e5e7eb;
+    }
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--text)}
+    .wrap{max-width:920px;margin:0 auto;padding:24px 16px}
+    .hero{display:grid;grid-template-columns:1.2fr .8fr;gap:20px;align-items:center}
+    @media (max-width:900px){ .hero{grid-template-columns:1fr} }
+    .card{background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 8px 30px rgba(0,0,0,.06);padding:22px}
+    h1{font-size:44px;line-height:1.08;margin:0 0 14px;color:#2c6bff}
+    h2{font-size:26px;margin:0 0 12px}
+    p{margin:0 0 12px;color:var(--text)}
+    ul{margin:12px 0 0 20px}
+    li{margin:8px 0}
+    .muted{color:var(--muted)}
+    .btn{display:inline-block;border:0;border-radius:999px;padding:16px 28px;font-weight:800;font-size:20px;
+         background:var(--accent);color:#fff;cursor:pointer;box-shadow:0 10px 24px rgba(255,122,47,.25)}
+    .btn:hover{background:var(--accent-d)}
+    .btn[hidden]{display:none !important}
+    .note{font-size:14px;color:var(--muted);margin-top:10px}
+    .steps{counter-reset:step}
+    .steps p{margin:12px 0}
+    .steps p:before{counter-increment:step;content:counter(step) ". ";font-weight:800;margin-right:6px;color:#334155}
+    .ok{display:none;color:#15803d;font-weight:700;margin-top:10px}
+    .ok.show{display:block}
+    .link{color:#2a6ef1;text-decoration:none}
+    .center{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+    .kbd{display:inline-block;border:1px solid var(--border);border-bottom-width:2px;border-radius:8px;padding:6px 10px;background:#f3f4f6}
+    .hr{height:1px;background:var(--border);margin:18px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap hero">
+    <div class="card">
+      <h1>Fraction Calculator Mobile App</h1>
+      <p>Get instant access to our professional fraction calculator designed for contractors.
+         Works offline once installed.</p>
+      <ul>
+        <li>Mixed numbers (e.g., <strong>1 1/4 + 2 3/8</strong>)</li>
+        <li>Precise decimal results</li>
+        <li>Fast, mobile-optimized interface</li>
+      </ul>
+
+      <div class="hr"></div>
+
+      <!-- Android/Desktop: real install button appears when supported -->
+      <div class="center" id="install-cta">
+        <button class="btn" id="installBtn" hidden>Install Calculator App</button>
+        <span id="installedMsg" class="ok">✔ Installed — look for it on your Home Screen / Apps.</span>
+      </div>
+
+      <!-- iPhone/iPad: manual steps -->
+      <div id="ios-steps" class="steps" style="display:none;margin-top:16px">
+        <h2>How to Install on iPhone / iPad</h2>
+        <p>Open this page in <strong>Safari</strong> (required).</p>
+        <p>Tap the <span class="kbd">Share</span> icon at the bottom.</p>
+        <p>Scroll and tap <span class="kbd">Add to Home Screen</span>.</p>
+        <p>Tap <span class="kbd">Add</span>. The app will appear on your Home Screen and work offline.</p>
+        <p class="note">Already installed? Open it from your Home Screen.</p>
+      </div>
+
+      <div id="fallback-steps" class="steps" style="display:none;margin-top:16px">
+        <h2>If the Install button isn’t showing</h2>
+        <p>In Chrome/Edge: open the menu <span class="kbd">⋮</span> and choose <span class="kbd">Install app</span>
+           or <span class="kbd">Add to Home screen</span>.</p>
+        <p>Make sure you’re on <strong>https://</strong> and not in an in-app browser.</p>
+      </div>
+
+      <div class="hr"></div>
+
+      <p><a class="link" href="./">Or open the calculator in your browser →</a></p>
+    </div>
+
+    <div class="card">
+      <h2>What you’ll get</h2>
+      <p>• Two-column display: full equation on the left, results on the right</p>
+      <p>• Mixed result and decimal (no improper fraction)</p>
+      <p>• History with running totals</p>
+      <p class="muted">Tip: you can also install from the calculator page’s browser menu.</p>
+    </div>
+  </div>
+
+  <script>
+    // Register SW if not already (safe to call again)
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js').catch(()=>{});
+    }
+
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches
+                      || (window.navigator.standalone === true);
+    const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    const installBtn = document.getElementById('installBtn');
+    const installedMsg = document.getElementById('installedMsg');
+    const iosSteps = document.getElementById('ios-steps');
+    const fallback = document.getElementById('fallback-steps');
+    const installCta = document.getElementById('install-cta');
+
+    // Show iOS instructions
+    if (isIOS && !isStandalone) {
+      iosSteps.style.display = 'block';
+    }
+
+    // If already installed, just show the note
+    if (isStandalone) {
+      installBtn.hidden = true;
+      installedMsg.classList.add('ok','show');
+    }
+
+    // Android/Desktop: capture beforeinstallprompt
+    let deferredPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBtn.hidden = false;
+      fallback.style.display = 'none';
+    });
+
+    // If the event never fires (some browsers), show fallback tips
+    window.setTimeout(() => {
+      if (!deferredPrompt && !isIOS && !isStandalone) {
+        fallback.style.display = 'block';
+      }
+    }, 1200);
+
+    // Click handler for install
+    installBtn.addEventListener('click', async () => {
+      if (!deferredPrompt) {
+        // Last-resort fallback (older Edge/Chrome UI)
+        fallback.style.display = 'block';
+        return;
+      }
+      deferredPrompt.prompt();
+      const choice = await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      if (choice && choice.outcome === 'accepted') {
+        installBtn.hidden = true;
+        installedMsg.classList.add('ok','show');
+      }
+    });
+
+    // When installed
+    window.addEventListener('appinstalled', () => {
+      installBtn.hidden = true;
+      installedMsg.classList.add('ok','show');
+    });
+  </script>
+</body>
+</html>
